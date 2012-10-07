@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# $Id$
+#
+# This script will show you all the filenames within a Dropbox directory tree
+# that are conflicted (i.e. that have unresolved changes with the same file
+# from another machine). You can use it by passing in the name of the Dropbox
+# root:
+#
+# show-dropbox-conflicts ~/Dropbox/
+#
+# If you also have a portion of the tree which is encrypted using encfs,
+# passing the -d option in addition will instead pass the filenames to
+# encfsctl. You can enter the encfs password and the conflicted filenames will
+# be decrypted to their plaintext versions:
+#
+# show-dropbox-conflicts -d ~/Dropbox/.encfs-subset/
+#
+# The first usage is non-interactive and is therefore suitable for running
+# from a regular cron job to ensure conflicts aren't building up. The second
+# prompts for the encfs password.
+
+DECODE=false
+
+while getopts ":d" opt; do
+    case $opt in
+        d)
+            DECODE=true
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument." >&2
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if $DECODE; then
+    (cd $1 && find .) | grep -i conflicted | cut -f 1 -d ' ' | xargs encfsctl decode $1
+else
+    (cd $1 && find .) | grep -i conflicted
+fi
