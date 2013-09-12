@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# This script will update a subdirectory within a git checkout directory (aka
+# the parent repository), which contains the contents of another git
+# repository (aka the child repository). It will create a single commit to
+# bring the parent's subdirectory up-to-date with the current contents of the
+# child repository, with a commit comment which contains the short hash of the
+# latest commit from the child.
+#
+# This script can therefore be considered as a lightweight way of representing
+# the contents of a child repository within a parent, without explicit use of
+# git-submodule.
+#
+# The script tries to be "safe" by creating a stash first for any local
+# changes in the parent repository, and restoring it at the end.
+#
+# Example usage:
+#
+# git-refresh-from-remote ~/local-git-checkout/repositoryX http://remote.host/repositoryX
+
+set -o errexit
+
+git stash save -q --include-untracked "git-refresh-from-remote: temporary stash for updating $1."
+tempdir=`mktemp -d`
+echo "Moving $1 out of the way to $tempdir..."
+mv $1 $tempdir/
+git clone $2 $1
+commit=`(cd $1 && git rev-parse --short HEAD)`
+rm -Rf $1/.git
+git add -A $1
+git commit -m "Update $1 ($commit from $2)."
+git stash pop -q
