@@ -5,18 +5,29 @@
 # repository (aka the child repository). It will create a single commit to
 # bring the parent's subdirectory up-to-date with the current contents of the
 # child repository, with a commit comment which contains the short hash of the
-# latest commit from the child.
+# latest commit from the child (if there are no changes, a commit is not
+# created).
 #
-# This script can therefore be considered as a lightweight way of representing
-# the contents of a child repository within a parent, without explicit use of
-# git-submodule.
+# This script can therefore be considered as a lightweight way of
+# representing, and keeping up-to-date, the contents of a child repository
+# within a parent, without explicit use of git-submodule.
 #
 # The script tries to be "safe" by creating a stash first for any local
 # changes in the parent repository, and restoring it at the end.
 #
+# Note that git history from the child repository is not accurately
+# represented in the parent repository - commits from the child repo between
+# the last time this command was called, and this one, are ignored, apart from
+# the very latest.
+#
 # Example usage:
 #
 # git-refresh-from-remote ~/local-git-checkout/repositoryX http://remote.host/repositoryX
+#
+# Possible future enhancements:
+#
+# * Support --no-commit, like other git commands.
+# * Support complete representation of child history in parent.
 
 set -o errexit
 
