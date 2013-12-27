@@ -2,7 +2,13 @@
 #
 # $Id$
 
-find | rename $@ -v 's/(Photo|Video) (\d\d)-(\d\d)-(\d\d\d\d) (\d\d) (\d\d) (\d\d)(\.jpg|\.png|\.mov)/${4}-${3}-${2}-${5}-${6}-${7}${8}/'
-find | rename $@ -v 's/IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)(\d\d)\.jpg/${1}-${2}-${3}-${4}-${5}-${6}\.jpg/'
-find | rename $@ -v 's/VID_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)(\d\d)\.mp4/${1}-${2}-${3}-${4}-${5}-${6}\.mp4/'
-find | rename $@ -v 'use POSIX; if($_ =~ /(.*)ima?g_?(\d\d\d\d)(\.jpg|\.png|\.mov|\.cr2)(.*)/i) { $_ = POSIX::strftime("$1%Y-%m-%d-%H-%M-%S$3$4", localtime((stat $_)[9])); }'
+if [[ $OSTYPE == darwin* ]]; then
+    EXTRA_OPTIONS="--stdin"
+else
+    EXTRA_OPTIONS=""
+fi
+
+find . | rename $@ $EXTRA_OPTIONS -v 's/(Photo|Video) (\d\d)-(\d\d)-(\d\d\d\d) (\d\d) (\d\d) (\d\d)(\.jpg|\.png|\.mov)/${4}-${3}-${2}-${5}-${6}-${7}${8}/'
+find . | rename $@ $EXTRA_OPTIONS -v 's/IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)(\d\d)\.jpg/${1}-${2}-${3}-${4}-${5}-${6}\.jpg/'
+find . | rename $@ $EXTRA_OPTIONS -v 's/VID_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)(\d\d)\.mp4/${1}-${2}-${3}-${4}-${5}-${6}\.mp4/'
+find . | rename $@ $EXTRA_OPTIONS -v 'use POSIX; if($_ =~ /(.*)ima?g_?(\d\d\d\d)(\.jpg|\.png|\.mov|\.cr2)(.*)/i) { $_ = POSIX::strftime("$1%Y-%m-%d-%H-%M-%S$3$4", localtime((stat $_)[9])); }'
