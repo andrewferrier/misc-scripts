@@ -32,7 +32,7 @@
 set -o errexit
 
 git stash save -q --include-untracked "git-refresh-from-remote: temporary stash for updating $1."
-tempdir=`mktemp -d`
+tempdir=`mktemp -d -t tmp.XXXXXXXXXX`
 echo "Moving $1 out of the way to $tempdir..."
 mv $1 $tempdir/
 git clone $2 $1
