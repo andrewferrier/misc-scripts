@@ -36,7 +36,7 @@ git stash save -q --include-untracked "git-refresh-from-remote: temporary stash 
 tempdir=`mktemp -d -t tmp.XXXXXXXXXX`
 echo "Moving $1 out of the way to $tempdir..."
 (cd $1) && mv $1 $tempdir/
-git clone $2 $1
+git clone --depth 1 $2 $1
 commit=`(cd $1 && git rev-parse --short HEAD)`
 rm -Rf $1/.git
 git add -A $1
