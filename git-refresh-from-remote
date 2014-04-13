@@ -32,13 +32,19 @@
 
 set -o errexit
 
+THROWAWAYCHANGESDIR=`mktemp -d -t grfr.throwawaychangesdir.XXXX`
+MODULETEMPDIR=`mktemp -d -t grfr.moduletempdir.XXXX`
+
+git clone --depth 1 $2 $MODULETEMPDIR
+(cd $MODULETEMPDIR && git submodule update --init --recursive)
+commit=`(cd $MODULETEMPDIR && git rev-parse --short HEAD)`
+(cd $MODULETEMPDIR && find . | grep /.git$ | xargs rm -R)
+
 git stash save -q --include-untracked "git-refresh-from-remote: temporary stash for updating $1."
-tempdir=`mktemp -d -t tmp.XXXXXXXXXX`
-echo "Moving $1 out of the way to $tempdir..."
-(cd $1) && mv $1 $tempdir/
-git clone --depth 1 $2 $1
-commit=`(cd $1 && git rev-parse --short HEAD)`
-rm -Rf $1/.git
+echo "Moving $1 out of the way to $THROWAWAYCHANGESDIR"
+(cd $1) && mv $1 $THROWAWAYCHANGESDIR/
+
+mv $MODULETEMPDIR $1
 git add -A $1
 git commit -m "Update $1 ($commit from $2)."
 git stash pop -q
