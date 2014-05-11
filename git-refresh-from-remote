@@ -29,8 +29,14 @@
 # * Support --no-commit, like other git commands.
 # * Support complete representation of child history in parent.
 # * Clarify process/message printed when adding child repo for the first time.
+# * Support stash list not being empty (currently doesn't work if one is never saved).
 
 set -o errexit
+
+if [ `git stash list | wc -l` -gt 0 ]; then
+    echo "Cannot start git-refresh-from-remote as stash list is not empty."
+    exit 1
+fi
 
 THROWAWAYCHANGESDIR=`mktemp -d -t grfr.throwawaychangesdir.XXXX`
 MODULETEMPDIR=`mktemp -d -t grfr.moduletempdir.XXXX`
@@ -45,6 +51,5 @@ echo "Moving $1 out of the way to $THROWAWAYCHANGESDIR"
 (cd $1) && mv $1 $THROWAWAYCHANGESDIR/
 
 mv $MODULETEMPDIR $1
-git add -A $1
-git commit -m "Update $1 ($commit from $2)."
+git add -A $1 && git commit -m "Update $1 ($commit from $2)." || rc=$?
 git stash pop -q
