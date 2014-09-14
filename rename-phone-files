@@ -1,6 +1,15 @@
 #!/bin/bash
 #
 # $Id$
+#
+# Rename media files with date/times in their filenames to a common pattern
+# that sorts well as a filename. Also renames media files with sequential
+# filenames to the same pattern.
+#
+# Target pattern: 2012-01-01-12-00-00.ext
+#
+# Any additional arguments passed to rename-phone-files will be passed into
+# 'rename'.
 
 if [[ $OSTYPE == darwin* ]]; then
     EXTRA_OPTIONS="--stdin"
