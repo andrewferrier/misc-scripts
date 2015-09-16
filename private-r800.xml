@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<root>
+    <devicevendordef>
+        <vendorname>LOGITECH</vendorname>
+        <vendorid>0x046d</vendorid>
+    </devicevendordef>
+
+    <deviceproductdef>
+        <productname>LOGITECH_R800</productname>
+        <productid>0xc52d</productid>
+    </deviceproductdef>
+
+    <appdef>
+        <appname>IWORK_KEYNOTE</appname>
+        <equal>com.apple.iWork.Keynote</equal>
+    </appdef>
+
+    <item>
+        <name>Logitech R800 Keynote Support</name>
+
+        <item>
+            <name>R800 For Keynote</name>
+            <identifier>private.R800_for_keynote</identifier>
+            <only>IWORK_KEYNOTE</only>
+            <device_only>DeviceVendor::LOGITECH, DeviceProduct::LOGITECH_R800</device_only>
+            <autogen>--KeyToKey-- KeyCode::DOT, KeyCode::B</autogen>
+            <autogen>--KeyToKey-- KeyCode::F5, KeyCode::P, ModifierFlag::OPTION_L | ModifierFlag::COMMAND_L</autogen>
+        </item>
+    </item>
+
+    <item>
+        <name>QuickTime Support</name>
+
+        <item>
+            <name>R800 For QuickTime</name>
+            <identifier>private.R800_for_quicktime</identifier>
+            <only>QUICKTIME</only>
+            <device_only>DeviceVendor::LOGITECH, DeviceProduct::LOGITECH_R800</device_only>
+            <autogen>--KeyToKey-- KeyCode::DOT, KeyCode::SPACE</autogen>
+            <autogen>--KeyToKey-- KeyCode::F5, KeyCode::F, ModifierFlag::COMMAND_L</autogen>
+            <autogen>--KeyToKey-- KeyCode::PAGEUP, KeyCode::CURSOR_LEFT, ModifierFlag::COMMAND_L</autogen>
+            <autogen>--KeyToKey-- KeyCode::PAGEDOWN, KeyCode::CURSOR_RIGHT, ModifierFlag::COMMAND_L</autogen>
+        </item>
+    </item>
+</root>
