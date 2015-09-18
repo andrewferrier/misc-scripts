@@ -1,0 +1,13 @@
+define(`COPYASUSER',
+`USER root
+COPY $1 $2
+RUN chown testuser $2/$1
+USER $3
+')
+
+define(`COPYASUSERDIR',
+`USER root
+COPY $1 $2
+RUN chown -R testuser $2
+USER $3
+')
