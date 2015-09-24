@@ -1,0 +1,38 @@
+#!/usr/bin/python3
+#
+# An alternative to
+# https://github.com/todbot/blink1/blob/master/linux/contrib/load-to-blink1.sh
+# which automatically changes the color of a blink(1) based on system load.
+#
+# Normally sits at faint green - as the system get more loaded, the blink(1)
+# becomes redder and more bright.
+
+import os
+import subprocess
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--debug", action="store_true")
+args = parser.parse_args()
+
+MIN_INTENSITY = 40
+REDNESS_MULTIPLIER = 20
+
+(one, five, fifteen) = os.getloadavg()
+
+if args.debug:
+    print("one=" + str(one) + ", five=" + str(five) + ", fifteen=" + str(fifteen))
+
+redness = min(255, ((fifteen * REDNESS_MULTIPLIER) + (five * REDNESS_MULTIPLIER) + (one * REDNESS_MULTIPLIER)))
+
+if redness < MIN_INTENSITY:
+    greenness = MIN_INTENSITY + (MIN_INTENSITY - redness)
+else:
+    greenness = 0
+
+blueness = 0
+
+if args.debug:
+    print("redness=" + str(redness) + ", greenness=" + str(greenness) + ", blueness=" + str(blueness))
+
+subprocess.call(["blink1-tool", "-m 5000", "--rgb=" + str(redness) + "," + str(greenness) + "," + str(blueness)], stdout = subprocess.DEVNULL)
