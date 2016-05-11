@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+
+import os
+import re
+import requests
+import sys
+import xml.dom.minidom
+
+from xml.dom.minidom import Node
+
+PREAMBLE='''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>URL</key>
+'''
+POSTAMBLE='''
+</dict>
+</plist>
+'''
+
+def tidy_filename(filenameToTidy):
+    newFilenameToTidy = re.sub('[^\w\-_\. ]', '_', filenameToTidy)
+    return newFilenameToTidy
+
+filename = sys.argv[1]
+targetdirectory = sys.argv[2]
+
+dom = xml.dom.minidom.parse(filename)
+
+posts = dom.getElementsByTagName('post')
+
+for post in posts:
+    description = post.attributes['description'].value
+    tags = post.attributes['tag'].value.split()
+    url = post.attributes['href'].value
+    if(not ('from' in tags and 'twitter' in tags)):
+        assert(description != '' and description is not None)
+        assert(url != '' and url is not None)
+        try:
+            request = requests.get(url)
+            if request.status_code != 200:
+                print("URL " + url + " returns status code " + str(request.status_code) + ", ignoring.", file=sys.stderr)
+            else:
+                for tag in tags:
+                    targetdir = os.path.join(targetdirectory, tag)
+                    os.makedirs(targetdir, exist_ok=True)
+                    contents = PREAMBLE + '\t<string>' + url + '</string>' + POSTAMBLE
+                    new_filename = os.path.join(targetdir, tidy_filename(description) + '.webloc')
+                    with open(new_filename, 'w') as f:
+                        f.write(contents)
+        except requests.exceptions.RequestException as e:
+            print("URL " + url + " failed with error " + str(e) + ", ignoring.", file=sys.stderr)
