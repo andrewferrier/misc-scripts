@@ -40,8 +40,8 @@ done
 shift $(($OPTIND - 1))
 
 if $DECODE; then
-    (cd $1 && find .) | grep -i conflicted | grep -v .dropbox.cache | cut -f 1 -d ' ' | xargs encfsctl decode $1
+    (cd "$1" && find .) | grep -i conflicted | grep -v .dropbox.cache | cut -f 1 -d ' ' | xargs encfsctl decode "$1"
 else
-    (cd $1 && find .) | grep -i conflicted | grep -v .dropbox.cache
+    (cd "$1" && find .) | grep -i conflicted | grep -v .dropbox.cache
     exit 0
 fi
