@@ -7,4 +7,5 @@ build:
 
 run: build
 	nohup docker run --rm -p 8080:80 --name draw.io $(IMAGETAG) &
+	sleep 2
 	open 'http://localhost:8080/index.html?offline=1&https=0'
