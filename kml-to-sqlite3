@@ -30,9 +30,12 @@ assert(len(coords) == len(whens))
 conn = sqlite3.connect(sys.argv[2])
 c = conn.cursor()
 
-c.execute("CREATE TABLE IF NOT EXISTS locations (timestamp INTEGER, timestamp_msgrcvd INTEGER, lat REAL, lon REAL, distance REAL, tid TEXT, acc INTEGER, alt INTEGER, batt INTEGER, t TEXT, vac INTEGER)")
+c.execute("CREATE TABLE IF NOT EXISTS locations (timestamp INTEGER PRIMARY KEY, timestamp_msgrcvd INTEGER, lat REAL, lon REAL, distance REAL, tid TEXT, acc INTEGER, alt INTEGER, batt INTEGER, t TEXT, vac INTEGER)")
 conn.commit()
 
 for ((lon, lat, alt), when) in tqdm(zip(coords, whens), desc="Inserting into sqlite3", total=len(coords)):
-    c.execute("INSERT INTO locations (timestamp, lon, lat, alt) VALUES(" + when + "," + lon + "," + lat + "," + alt + ")")
+    try:
+        c.execute("INSERT INTO locations (timestamp, lon, lat, alt) VALUES(" + when + "," + lon + "," + lat + "," + alt + ")")
+    except sqlite3.IntegrityError:
+        print("Likely duplicate key violation on timestamp " + when)
     conn.commit()
