@@ -35,7 +35,7 @@ conn.commit()
 
 for ((lon, lat, alt), when) in tqdm(zip(coords, whens), desc="Inserting into sqlite3", total=len(coords)):
     try:
-        c.execute("INSERT INTO locations (timestamp, lon, lat, alt) VALUES(" + when + "," + lon + "," + lat + "," + alt + ")")
+        c.execute("INSERT INTO locations (timestamp, lon, lat, alt, tid) VALUES(" + when + "," + lon + "," + lat + "," + alt + ", '03')")
     except sqlite3.IntegrityError:
         print("Likely duplicate key violation on timestamp " + when)
     conn.commit()
