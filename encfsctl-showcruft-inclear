@@ -20,8 +20,6 @@ with tempfile.NamedTemporaryFile('w', delete=False) as password_fp:
     password_fp.write('#!/bin/sh\n')
     password_fp.write('echo "' + password + '"\n')
 
-print(os.path.exists(password_fp.name))
-
 cruft_completed = subprocess.run('encfsctl showcruft ' + args.encfssourcedir, stdout=subprocess.PIPE, shell=True)
 assert(cruft_completed.returncode == 0)
 for line in cruft_completed.stdout.decode('utf-8').splitlines():
