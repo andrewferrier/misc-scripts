@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('encfssourcedir', type=str)
 args = parser.parse_args()
 
-password = getpass.getpass(prompt='Encfs password:')
+password = getpass.getpass(prompt='Encfs password (from encfsctl-showcruft-inclear):')
 
 with tempfile.NamedTemporaryFile('w', delete=False) as password_fp:
     st = os.stat(password_fp.name)
