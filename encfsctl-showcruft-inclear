@@ -8,7 +8,7 @@ import subprocess
 import tempfile
 
 parser = argparse.ArgumentParser()
-parser.add_argument('encfssourcedir', type=str);
+parser.add_argument('encfssourcedir', type=str)
 args = parser.parse_args()
 
 password = getpass.getpass(prompt='Encfs password:')
@@ -28,7 +28,9 @@ for line in cruft_completed.stdout.decode('utf-8').splitlines():
     if line.startswith(args.encfssourcedir) and '.encfs6.xml' not in line:
         pathelements = list(filter(len, line.rsplit(sep=args.encfssourcedir)[1].split('/')))
         for element in pathelements:
-            element_completed = subprocess.run('encfsctl decode --extpass="' + password_fp.name + '" ' + args.encfssourcedir + ' ' + element, stdout=subprocess.PIPE, shell=True)
+            element_completed = subprocess.run('encfsctl decode --extpass="' +
+                                               password_fp.name + '" ' + args.encfssourcedir +
+                                               ' ' + element, stdout=subprocess.PIPE, shell=True)
             print(element_completed.stdout)
 
 os.remove(password_fp.name)
