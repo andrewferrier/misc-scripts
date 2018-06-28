@@ -1,6 +1,5 @@
 #!/usr/bin/python
 #
-# $Id$
 
 """
 Write some text on a Roku soundbridge, using the telnet interface.

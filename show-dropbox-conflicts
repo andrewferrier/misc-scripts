@@ -1,6 +1,5 @@
 #!/bin/sh
 #
-# $Id$
 #
 # This script will show you all the filenames within a Dropbox directory tree
 # that are conflicted (i.e. that have unresolved changes with the same file
