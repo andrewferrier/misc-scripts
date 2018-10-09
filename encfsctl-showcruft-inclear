@@ -30,6 +30,6 @@ for line in cruft_completed.stdout.decode('utf-8').splitlines():
             element_completed = subprocess.run('encfsctl decode --extpass="' +
                                                password_fp.name + '" ' + args.encfssourcedir +
                                                ' ' + shlex.quote(element), stdout=subprocess.PIPE, shell=True)
-            print(element_completed.stdout)
+            print("Decode of " + element + " is " + str(element_completed.stdout))
 
 os.remove(password_fp.name)
