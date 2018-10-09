@@ -3,6 +3,7 @@
 import argparse
 import getpass
 import os
+import shlex
 import stat
 import subprocess
 import tempfile
@@ -28,7 +29,7 @@ for line in cruft_completed.stdout.decode('utf-8').splitlines():
         for element in pathelements:
             element_completed = subprocess.run('encfsctl decode --extpass="' +
                                                password_fp.name + '" ' + args.encfssourcedir +
-                                               ' ' + element, stdout=subprocess.PIPE, shell=True)
+                                               ' ' + shlex.quote(element), stdout=subprocess.PIPE, shell=True)
             print(element_completed.stdout)
 
 os.remove(password_fp.name)
