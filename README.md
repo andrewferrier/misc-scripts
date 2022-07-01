@@ -29,9 +29,8 @@ Brief descriptions of some of the contents:
 (for anyone looking for git-refresh-from-remote, it has moved to
 [git-utilities](https://github.com/andrewferrier/git-utilities))
 
-(for anyone looking for rename-phone-files, I now provide this functionality
-in [normalize-filename](https://github.com/andrewferrier/normalize-filename)
-instead.)
+(for anyone looking for rename-phone-files, I now provide this functionality in
+[normfn](https://github.com/andrewferrier/normfn) instead.)
 
 (for anyone looking for draw.io-offline-docker, it's not really needed any
 more - draw.io provide desktop integrations
